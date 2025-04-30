@@ -52,7 +52,7 @@ def load_key(path: str):
 
 
 def encrypt(pub, plaintext: bytes | str):
-#    ECIES-style encryption. Load key if path provided
+#   ECIES-style encryption. Load key if path provided
     
     if isinstance(pub, str):
         pub = load_key(pub)
