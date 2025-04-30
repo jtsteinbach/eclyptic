@@ -85,7 +85,9 @@ def encrypt(pub, plaintext: bytes | str):
 
 
 def decrypt(priv, ciphertext: bytes):
-#   ECIES-style decryption matching encrypt(). Returns decrypted plaintext (utf-8 str). Load key if path provided
+#   ECIES-style decryption matching encrypt()
+#   Returns decrypted plaintext (utf-8 str)
+#   Load key if path provided
 
     if isinstance(priv, str):
         priv = load_key(priv)
