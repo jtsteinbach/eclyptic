@@ -1,6 +1,6 @@
 # ECC-Lib
 
-> **ECC-Lib** is a simple, production-ready Python library implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
+> **ECC-Lib** is a simple Python library implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
 
 ---
 
