@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-#
+# ──────────────────────────────
 #   Recursive ECC        v1.1.0
-#   License            MIT 2025
-#   Developer       jts.gg/recc
+#   Author          jts.gg/recc
+#   License   r2.jts.gg/license
+# ──────────────────────────────
 
 import os
 from cryptography.hazmat.primitives.asymmetric import ec
