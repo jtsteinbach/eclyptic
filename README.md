@@ -1,6 +1,6 @@
-# ECC-Lib
+# recc-Lib
 
-> **ECC-Lib** is a simple Python library implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
+> **recc-Lib** is a simple Python module implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
 
 ---
 
@@ -21,8 +21,8 @@
 
 ```bash
 pip install cryptography
-# then include ecc.py in your project, or install via:
-# pip install path/to/ecc-lib
+# then include recc.py in your project, or install via:
+# pip install path/to/recc-lib
 ```
 
 
@@ -31,23 +31,23 @@ pip install cryptography
 ## 🚀 Quickstart
 
 ```python
-import ecc
+import recc
 
 # 1️⃣ Generate keypair
-priv, pub = ecc.keypair(curve='secp256r1')
+priv, pub = recc.keypair(curve='secp256r1')
 
 # 2️⃣ Save keys
-ecc.save_key(priv, 'ec_private.der')
-ecc.save_key(pub,  'ec_public.der')
+recc.save_key(priv, 'ec_private.der')
+recc.save_key(pub,  'ec_public.der')
 
 # 3️⃣ Load them later
-priv2 = ecc.load_key('ec_private.der')
-pub2  = ecc.load_key('ec_public.der')
+priv2 = recc.load_key('ec_private.der')
+pub2  = recc.load_key('ec_public.der')
 
 # 4️⃣ Encrypt & decrypt a message
-msg = "Hello, ECC!"
-ct  = ecc.encrypt(pub2, msg)
-pt  = ecc.decrypt(priv2, ct)
+msg = "Hello, recc!"
+ct  = recc.encrypt(pub2, msg)
+pt  = recc.decrypt(priv2, ct)
 
 assert pt == msg
 ```
@@ -67,7 +67,7 @@ Generate an EC private/public key pair.
 
 ### `save_key(key, path: str) -> None`
 
-Write an ECC key to disk in DER format.
+Write an recc key to disk in DER format.
 
 - **Parameters**:
   - `key` – private or public key object.
@@ -76,7 +76,7 @@ Write an ECC key to disk in DER format.
 
 ### `load_key(path: str) -> key`
 
-Read a DER‐encoded ECC key (private or public).
+Read a DER‐encoded recc key (private or public).
 
 - **Parameters**:
   - `path` – DER file to read.
@@ -121,7 +121,7 @@ Reverse the ECIES encryption.
 
 ## 👩‍💻 Examples
 
-- See [example_ecc_usage.py](examples/example_ecc_usage.py) for a full demo
+- See [example_recc_usage.py](examples/example_recc_usage.py) for a full demo
 - Round‑trip UTF‑8 text & raw bytes
 
 ---
