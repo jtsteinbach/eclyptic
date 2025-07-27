@@ -22,7 +22,7 @@
 ```bash
 pip install cryptography
 # then include recc.py in your project, or install via:
-# pip install path/to/recc-lib
+# pip install path/to/recc
 ```
 
 
