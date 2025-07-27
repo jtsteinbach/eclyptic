@@ -27,7 +27,7 @@ pip3 install eclyptic
 ```python
 import eclyptic
 
-# generate a compact Base64-encoded keypair
+# generate a compact base64-encoded keypair
 priv, pub = eclyptic.keypair()
 
 # encrypt data (bytes or UTF-8 string)
