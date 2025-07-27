@@ -46,6 +46,7 @@ def encrypt(pub, plaintext: bytes | str):
     header = len(eph_pub_bytes).to_bytes(4, 'big')
     return header + eph_pub_bytes + nonce + ct
 
+# ────── ECIES-style decryption ──────
 def decrypt(priv, ciphertext: bytes):
     # parse header
     data = ciphertext
