@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#   ECC-Lib              v1.1.0
+#   Recursive ECC        v1.1.0
 #   License            MIT 2025
 #   Developer       jts.gg/recc
 
