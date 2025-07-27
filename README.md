@@ -1,140 +1,94 @@
-# RECC - Recursive ECC
+# Recursive ECC (recc)
 
-> **RECC** is a simple Python module implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
-
----
-
-## 🌟 Features
-
-- **Keypair generation** on any NIST/SECG curve (default: `secp256r1`).
-- **Save/load** keys in **DER** format (private or public).
-- **Encrypt/decrypt** arbitrary data or UTF-8 text via ECIES:
-  - Ephemeral key exchange (ECDH)
-  - HKDF key derivation (SHA‑256)
-  - AES‑GCM authenticated encryption
-- **Zero external dependencies** beyond the `cryptography` package.
-- **ThreadPoolExecutor** stub in place for easy parallel streaming.
+**Version**: 1.1.0\
+**License**: MIT 2025\
+**Developer**: [jts.gg/recc](https://jts.gg/recc)
 
 ---
 
-## 📦 Installation
+Recursive ECC is a lightweight Python library that implements an ECIES‑style encryption scheme using:
+
+- **Elliptic‑Curve Diffie‑Hellman (ECDH)** for key agreement
+- **HKDF‑SHA256** for symmetric key derivation
+- **AES‑GCM** for authenticated encryption
+
+It’s designed for ease of use, forward secrecy, and support for arbitrary binary payloads.
+
+## Features
+
+- Generate ECC keypairs on common curves (default: `secp256r1`).
+- Encrypt data to a recipient’s public key using a fresh ephemeral key per message.
+- Decrypt encrypted blobs to recover raw bytes (caller handles UTF‑8 decoding).
+- Zero external dependencies beyond `cryptography`.
+
+## Installation
 
 ```bash
-pip install cryptography
-# then include recc.py in your project, or install via:
-# pip install path/to/recc
+# Install from PyPI (when published):
+pip install recursive-ecc
+
+# Or install directly from GitHub:
+git clone https://github.com/jtsteinbach/recc.git
+cd recc
+pip install .
 ```
 
-
----
-
-## 🚀 Quickstart
+## Quick Start
 
 ```python
 import recc
 
-# 1️⃣ Generate keypair
-priv, pub = recc.keypair(curve='secp256r1')
+data = "secret data"
 
-# 2️⃣ Save keys
-recc.save_key(priv, 'ec_private.der')
-recc.save_key(pub,  'ec_public.der')
+# 1️⃣ Generate a keypair
+priv, pub = recc.keypair()
 
-# 3️⃣ Load them later
-priv2 = recc.load_key('ec_private.der')
-pub2  = recc.load_key('ec_public.der')
+# 2️⃣ Encrypt some data (bytes or string)
+encrypted_data = recc.encrypt(pub, data)
 
-# 4️⃣ Encrypt & decrypt a message
-msg = "Hello, recc!"
-ct  = recc.encrypt(pub2, msg)
-pt  = recc.decrypt(priv2, ct)
-
-assert pt == msg
+# 3️⃣ Decrypt back into raw bytes
+decrypted_data = recc.decrypt(priv, encrypted_data)
+# If you need a string:
+text_string = decrypted_data.decode('utf-8')
 ```
 
----
+## API Reference
 
-## 📚 API Reference
+### `keypair(curve: str = 'secp256r1') -> (EllipticCurvePrivateKey, EllipticCurvePublicKey)`
 
-### `keypair(curve: str = 'secp256r1') -> (priv, pub)`
-
-Generate an EC private/public key pair.
+Generate a new ECC private/public keypair on the specified curve.
 
 - **Parameters**:
-  - `curve` – name of curve class (e.g. `secp256r1`, `secp384r1`, `secp521r1`).
-- **Returns**: `(EllipticCurvePrivateKey, EllipticCurvePublicKey)`
+  - `curve`: Name of the curve (e.g. `'secp256r1'`, `'secp384r1'`).
+- **Returns**: Tuple `(private_key, public_key)`.
 
+### `encrypt(pub, plaintext: bytes \| str) -> bytes`
 
-### `save_key(key, path: str) -> None`
-
-Write an recc key to disk in DER format.
-
-- **Parameters**:
-  - `key` – private or public key object.
-  - `path` – output filename (e.g. `key.der`).
-
-
-### `load_key(path: str) -> key`
-
-Read a DER‐encoded recc key (private or public).
+Encrypt a message using ECIES:
 
 - **Parameters**:
-  - `path` – DER file to read.
-- **Returns**: Loaded key object.
+  - `pub`: An `EllipticCurvePublicKey` object or path to a DER‑encoded public key file.
+  - `plaintext`: The payload to encrypt (`bytes` or UTF‑8 `str`).
+- **Returns**: A single `bytes` blob containing:
+  1. 4‑byte length of the ephemeral public key
+  2. Ephemeral public key (X9.62 uncompressed)
+  3. 12‑byte AES‑GCM nonce
+  4. AES‑GCM ciphertext + authentication tag
 
+### `decrypt(priv, ciphertext: bytes) -> bytes`
 
-### `encrypt(pub, plaintext: str | bytes) -> bytes`
-
-Perform ECIES encryption.
-
-- **Parameters**:
-  - `pub` – public key object or path to `.der` file.
-  - `plaintext` – UTF-8 string or raw bytes.
-- **Returns**: Single ciphertext blob:
-  ```text
-  [4-byte eph_pub_len] [eph_pub_bytes] [12B nonce] [ciphertext]
-  ```
-
-
-### `decrypt(priv, ciphertext: bytes) -> str`
-
-Reverse the ECIES encryption.
+Decrypt a blob produced by `encrypt()`:
 
 - **Parameters**:
-  - `priv` – private key object or path to `.der` file.
-  - `ciphertext` – blob from `encrypt()`.
-- **Returns**: Decrypted UTF-8 string.
+  - `priv`: An `EllipticCurvePrivateKey` object or path to a DER‑encoded private key file.
+  - `ciphertext`: The `bytes` blob returned by `encrypt()`.
+- **Returns**: Raw decrypted `bytes`. Use `.decode('utf-8')` if you know the payload was text.
 
+## Contributing
 
----
+Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/jtsteinbach/recc).
 
-## 🔧 File Formats
+## License
 
-- **DER**: Binary ASN.1 encoding (PKCS#8 for private, SPKI for public).
-- **Ciphertext blob**:
-  1. 4‑byte big‑endian length of ephemeral public key
-  2. Ephemeral public key bytes
-  3. 12‑byte AES-GCM nonce
-  4. Encrypted & authenticated ciphertext
-
----
-
-## 👩‍💻 Examples
-
-- See [example_recc_usage.py](examples/example_recc_usage.py) for a full demo
-- Round‑trip UTF‑8 text & raw bytes
-
----
-
-## 🔒 Security Notes
-
-- Always use fresh ephemeral keys per message.
-- Protect private `.der` files with filesystem permissions.
-- Use a secure random source (`os.urandom`).
-
----
-
-## 📝 License
-
-Released under the **MIT License**. See [LICENSE](LICENSE).
+This project is licensed under the MIT License © 2025 JT Steinbach.
 
