@@ -24,8 +24,8 @@ It’s designed for ease of use, forward secrecy, and support for arbitrary bina
 ## Installation
 
 ```bash
-# Install from PyPI (when published):
-pip install recursive-ecc
+# Install from PyPI
+pip3 install eclyptic
 
 # Or install directly from GitHub:
 git clone https://github.com/jtsteinbach/eclyptic.git
@@ -34,9 +34,6 @@ pip install .
 ```
 
 ## Quick Start
-```
-pip3 install eclyptic
-```
 
 ```python
 import eclyptic
