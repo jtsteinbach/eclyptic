@@ -1,4 +1,4 @@
-# Eclyptic (recc)
+# Eclyptic
 
 **Version**: 1.1.0\
 **License**: MIT 2025\
