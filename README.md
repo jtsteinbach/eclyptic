@@ -2,7 +2,7 @@
 
 **Version**: 1.1.0\
 **License**: MIT 2025\
-**Developer**: [jts.gg/recc](https://jts.gg/recc)
+**Developer**: [jts.gg/eclyptic](https://jts.gg/eclyptic)
 
 ---
 
@@ -28,8 +28,8 @@ It’s designed for ease of use, forward secrecy, and support for arbitrary bina
 pip install recursive-ecc
 
 # Or install directly from GitHub:
-git clone https://github.com/jtsteinbach/recc.git
-cd recc
+git clone https://github.com/jtsteinbach/eclyptic.git
+cd eclyptic
 pip install .
 ```
 
@@ -89,7 +89,7 @@ Decrypt a blob produced by `encrypt()`:
 
 ## Contributing
 
-Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/jtsteinbach/recc).
+Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/jtsteinbach/eclyptic).
 
 ## License
 
