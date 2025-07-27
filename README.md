@@ -1,4 +1,4 @@
-# Recursive ECC (recc)
+# Eclyptic (recc)
 
 **Version**: 1.1.0\
 **License**: MIT 2025\
@@ -34,20 +34,23 @@ pip install .
 ```
 
 ## Quick Start
+```
+pip3 install eclyptic
+```
 
 ```python
-import recc
+import eclyptic
 
 data = "secret data"
 
 # 1️⃣ Generate a keypair
-priv, pub = recc.keypair()
+priv, pub = eclyptic.keypair()
 
 # 2️⃣ Encrypt some data (bytes or string)
-encrypted_data = recc.encrypt(pub, data)
+encrypted_data = eclyptic.encrypt(pub, data)
 
 # 3️⃣ Decrypt back into raw bytes
-decrypted_data = recc.decrypt(priv, encrypted_data)
+decrypted_data = eclyptic.decrypt(priv, encrypted_data)
 # If you need a string:
 text_string = decrypted_data.decode('utf-8')
 ```
