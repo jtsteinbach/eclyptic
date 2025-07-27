@@ -18,7 +18,7 @@ Designed for ease of use, forward secrecy, and efficiency with arbitrary binary 
 ## Installation
 
 ```bash
-# Install from PyPI
+# install from PyPI
 pip3 install eclyptic
 ```
 
@@ -27,14 +27,14 @@ pip3 install eclyptic
 ```python
 import eclyptic
 
-# 1️⃣ Generate a compact Base64-encoded keypair
+# generate a compact Base64-encoded keypair
 priv, pub = eclyptic.keypair()
 
-# 2️⃣ Encrypt data (bytes or UTF-8 string)
+# encrypt data (bytes or UTF-8 string)
 data = "secret data"
 encrypted_data = eclyptic.encrypt(pub, data)
 
-# 3️⃣ Decrypt back into raw bytes or UTF-8 text
+# decrypt back into raw bytes or UTF-8 text
 decrypted_bytes = eclyptic.decrypt(priv, encrypted_data)
 plaintext = decrypted_bytes.decode('utf-8')
 ```
