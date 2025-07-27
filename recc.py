@@ -26,10 +26,10 @@ def encrypt(pub, plaintext: bytes | str):
     else:
         raise TypeError("plaintext must be bytes or str")
 
-    # Ephemeral key
+    # ephemeral key
     eph_priv = ec.generate_private_key(pub.curve)
     shared = eph_priv.exchange(ec.ECDH(), pub)
-    # Derive symmetric key
+    # derive symmetric key
     sym_key = HKDF(
         algorithm=hashes.SHA256(), length=32,
         salt=None, info=b'ecies'
@@ -38,7 +38,7 @@ def encrypt(pub, plaintext: bytes | str):
     aesgcm = AESGCM(sym_key)
     nonce = os.urandom(12)
     ct = aesgcm.encrypt(nonce, data, None)
-    # Serialize ephemeral public key
+    # serialize ephemeral public key
     eph_pub_bytes = eph_priv.public_key().public_bytes(
         serialization.Encoding.X962,
         serialization.PublicFormat.UncompressedPoint
@@ -47,7 +47,7 @@ def encrypt(pub, plaintext: bytes | str):
     return header + eph_pub_bytes + nonce + ct
 
 def decrypt(priv, ciphertext: bytes):
-    # Parse header
+    # parse header
     data = ciphertext
     eplen = int.from_bytes(data[:4], 'big')
     offset = 4
@@ -57,7 +57,7 @@ def decrypt(priv, ciphertext: bytes):
     offset += 12
     ct = data[offset:]
 
-    # Rebuild ephemeral public key
+    # rebuild ephemeral public key
     eph_pub = ec.EllipticCurvePublicKey.from_encoded_point(priv.curve, eph_bytes)
     shared = priv.exchange(ec.ECDH(), eph_pub)
     sym_key = HKDF(
