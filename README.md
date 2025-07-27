@@ -1,6 +1,6 @@
-# recc-Lib
+# RECC - Recursive ECC
 
-> **recc-Lib** is a simple Python module implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
+> **RECC** is a simple Python module implementing ECIES-style encryption (ECDH + AES-GCM) using standard curves. Perfect for applications needing high-performance asymmetric encryption with minimal dependencies.
 
 ---
 
