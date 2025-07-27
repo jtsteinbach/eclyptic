@@ -1,36 +1,25 @@
 # Eclyptic Asymmetric Encryption
 
-**Version**: 1.1.0\
-**License**: MIT 2025\
+**Version**: 1.2.0
+**License**: [LICENSE](https://r2.jts.gg/license)
 **Developer**: [jts.gg/eclyptic](https://jts.gg/eclyptic)
 
 ---
 
-Eclyptic is a lightweight Python library that implements a recursive ECIES‑style encryption scheme using:
+Eclyptic is a lightweight Python library that implements a streamlined ECIES‑style encryption scheme utilizing:
 
-- **Elliptic‑Curve Diffie‑Hellman (ECDH)** for key agreement
-- **HKDF‑SHA256** for symmetric key derivation
-- **AES‑GCM** for authenticated encryption
+* **Elliptic‑Curve Diffie‑Hellman (ECDH)** for key agreement
+* **HKDF‑SHA256** for symmetric key derivation
+* **AES‑GCM** for authenticated encryption
+* **Compressed ECC public keys** with compact **Base64 URL-safe encoding** (no padding)
 
-It’s designed for ease of use, forward secrecy, and support for arbitrary binary payloads.
-
-## Features
-
-- Generate ECC keypairs on common curves (default: `secp256r1`).
-- Encrypt data to a recipient’s public key using a fresh ephemeral key per message.
-- Decrypt encrypted blobs to recover raw bytes (caller handles UTF‑8 decoding).
-- Zero external dependencies beyond `cryptography`.
+Designed for ease of use, forward secrecy, and efficiency with arbitrary binary and text payloads.
 
 ## Installation
 
 ```bash
 # Install from PyPI
 pip3 install eclyptic
-
-# Or install directly from GitHub:
-git clone https://github.com/jtsteinbach/eclyptic.git
-cd eclyptic
-pip install .
 ```
 
 ## Quick Start
@@ -38,57 +27,54 @@ pip install .
 ```python
 import eclyptic
 
-data = "secret data"
-
-# 1️⃣ Generate a keypair
+# 1️⃣ Generate a compact Base64-encoded keypair
 priv, pub = eclyptic.keypair()
 
-# 2️⃣ Encrypt some data (bytes or string)
+# 2️⃣ Encrypt data (bytes or UTF-8 string)
+data = "secret data"
 encrypted_data = eclyptic.encrypt(pub, data)
 
-# 3️⃣ Decrypt back into raw bytes
-decrypted_data = eclyptic.decrypt(priv, encrypted_data)
-# If you need a string:
-text_string = decrypted_data.decode('utf-8')
+# 3️⃣ Decrypt back into raw bytes or UTF-8 text
+decrypted_bytes = eclyptic.decrypt(priv, encrypted_data)
+plaintext = decrypted_bytes.decode('utf-8')
 ```
 
 ## API Reference
 
-### `keypair(curve: str = 'secp256r1') -> (EllipticCurvePrivateKey, EllipticCurvePublicKey)`
+### `keypair(curve_name: str = 'secp256r1') -> tuple[str, str]`
 
-Generate a new ECC private/public keypair on the specified curve.
+Generates a new ECC private/public keypair on the specified curve, returning keys as Base64 URL-safe strings.
 
-- **Parameters**:
-  - `curve`: Name of the curve (e.g. `'secp256r1'`, `'secp384r1'`).
-- **Returns**: Tuple `(private_key, public_key)`.
+* **Parameters**:
 
-### `encrypt(pub, plaintext: bytes \| str) -> bytes`
+  * `curve_name`: ECC curve identifier (`'secp256r1'` by default).
+* **Returns**: Tuple `(priv_b64, pub_b64)`:
 
-Encrypt a message using ECIES:
+  * `priv_b64`: Base64-encoded private scalar.
+  * `pub_b64`: Base64-encoded compressed public key.
 
-- **Parameters**:
-  - `pub`: An `EllipticCurvePublicKey` object or path to a DER‑encoded public key file.
-  - `plaintext`: The payload to encrypt (`bytes` or UTF‑8 `str`).
-- **Returns**: A single `bytes` blob containing:
-  1. 4‑byte length of the ephemeral public key
-  2. Ephemeral public key (X9.62 uncompressed)
-  3. 12‑byte AES‑GCM nonce
-  4. AES‑GCM ciphertext + authentication tag
+### `encrypt(pub_b64: str, plaintext: bytes | str) -> bytes`
 
-### `decrypt(priv, ciphertext: bytes) -> bytes`
+Encrypts a message using ECIES with a compressed ephemeral public key.
 
-Decrypt a blob produced by `encrypt()`:
+* **Parameters**:
 
-- **Parameters**:
-  - `priv`: An `EllipticCurvePrivateKey` object or path to a DER‑encoded private key file.
-  - `ciphertext`: The `bytes` blob returned by `encrypt()`.
-- **Returns**: Raw decrypted `bytes`. Use `.decode('utf-8')` if you know the payload was text.
+  * `pub_b64`: Base64-encoded compressed public key.
+  * `plaintext`: Payload to encrypt (`bytes` or UTF‑8 `str`).
+* **Returns**: Single `bytes` blob containing:
 
-## Contributing
+  1. 2-byte length of ephemeral public key
+  2. Compressed ephemeral public key (X9.62)
+  3. 12-byte AES‑GCM nonce
+  4. AES‑GCM ciphertext with authentication tag
 
-Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request on [GitHub](https://github.com/jtsteinbach/eclyptic).
+### `decrypt(priv_b64: str, ciphertext: bytes) -> bytes`
 
-## License
+Decrypts ciphertext produced by `encrypt()`.
 
-This project is licensed under the MIT License © 2025 JT Steinbach.
+* **Parameters**:
+
+  * `priv_b64`: Base64-encoded private scalar.
+  * `ciphertext`: Ciphertext blob from `encrypt()`.
+* **Returns**: Decrypted `bytes`. Use `.decode('utf-8')` for text.
 
