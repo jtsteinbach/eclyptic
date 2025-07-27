@@ -4,6 +4,8 @@
 **License**: [LICENSE](https://r2.jts.gg/license)
 **Developer**: [jts.gg/eclyptic](https://jts.gg/eclyptic)
 
+**REPORT BUGS VIA EMAIL:** eclyptic@jts.gg
+
 ---
 
 Eclyptic is a lightweight Python library that implements a streamlined ECIES‑style encryption scheme utilizing:
