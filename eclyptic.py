@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ──────────────────────────────
-#   Recursive ECC        v1.1.0
+#   Eclyptic ECC         v1.1.0
 #   Author          jts.gg/recc
 #   License   r2.jts.gg/license
 # ──────────────────────────────
