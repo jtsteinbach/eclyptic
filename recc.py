@@ -10,51 +10,15 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-
+# ────── generate ECC keypair ──────
 def keypair(curve: str = 'secp256r1'):
-#   Generate an ECC keypair on the specified curve.
-    Returns (private_key, public_key).
     curve_obj = getattr(ec, curve.upper())() if hasattr(ec, curve.upper()) else ec.SECP256R1()
     priv = ec.generate_private_key(curve_obj)
     pub = priv.public_key()
     return priv, pub
 
-
-def save_key(key, path: str):
-#   Save a private or public ECC key to a file in DER format.
-
-    if isinstance(key, ec.EllipticCurvePrivateKey):
-        data = key.private_bytes(
-            encoding=serialization.Encoding.DER,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
-        )
-    elif isinstance(key, ec.EllipticCurvePublicKey):
-        data = key.public_bytes(
-            encoding=serialization.Encoding.DER,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
-        )
-    else:
-        raise TypeError("Key must be an ECC PrivateKey or PublicKey")
-    with open(path, 'wb') as f:
-        f.write(data)
-
-
-def load_key(path: str):
-#    Load an ECC key (private or public) from a DER-formatted file.
-
-    data = open(path, 'rb').read()
-    try:
-        return serialization.load_der_private_key(data, password=None)
-    except ValueError:
-        return serialization.load_der_public_key(data)
-
-
+# ────── ECIES-style encryption ──────
 def encrypt(pub, plaintext: bytes | str):
-#   ECIES-style encryption. Load key if path provided
-    
-    if isinstance(pub, str):
-        pub = load_key(pub)
     if isinstance(plaintext, str):
         data = plaintext.encode('utf-8')
     elif isinstance(plaintext, (bytes, bytearray)):
@@ -82,14 +46,7 @@ def encrypt(pub, plaintext: bytes | str):
     header = len(eph_pub_bytes).to_bytes(4, 'big')
     return header + eph_pub_bytes + nonce + ct
 
-
 def decrypt(priv, ciphertext: bytes):
-#   ECIES-style decryption matching encrypt()
-#   Returns decrypted plaintext (utf-8 str)
-#   Load key if path provided
-
-    if isinstance(priv, str):
-        priv = load_key(priv)
     # Parse header
     data = ciphertext
     eplen = int.from_bytes(data[:4], 'big')
