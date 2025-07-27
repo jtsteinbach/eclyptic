@@ -1,4 +1,4 @@
-# Eclyptic
+# Eclyptic Asymmetric Encryption
 
 **Version**: 1.1.0\
 **License**: MIT 2025\
@@ -6,7 +6,7 @@
 
 ---
 
-Recursive ECC is a lightweight Python library that implements an ECIES‑style encryption scheme using:
+Eclyptic is a lightweight Python library that implements a recursive ECIES‑style encryption scheme using:
 
 - **Elliptic‑Curve Diffie‑Hellman (ECDH)** for key agreement
 - **HKDF‑SHA256** for symmetric key derivation
