@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-#   ECC-Lib              v1.0.0
+#
+#   ECC-Lib              v1.1.0
 #   License            MIT 2025
-#   Author        jts.gg/ecclib
+#   Developer       jts.gg/recc
 
 import os
-from concurrent.futures import ThreadPoolExecutor
-
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -110,4 +109,4 @@ def decrypt(priv, ciphertext: bytes):
     ).derive(shared)
     aesgcm = AESGCM(sym_key)
     pt = aesgcm.decrypt(nonce, ct, None)
-    return pt.decode('utf-8')
+    return pt
